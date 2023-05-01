@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	BotToken = os.Getenv("BOT_TOKEN")
+	TeleToken = os.Getenv("TELE_TOKEN")
 )
 
 // botCmd represents the bot command
@@ -31,7 +31,7 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		pref := tele.Settings{
 			URL:    "",
-			Token:  BotToken,
+			Token:  TeleToken,
 			Poller: &tele.LongPoller{Timeout: 10 * time.Second},
 		}
 
