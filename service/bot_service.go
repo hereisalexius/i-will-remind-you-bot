@@ -7,11 +7,11 @@ import (
 	"time"
 
 	"gopkg.in/robfig/cron.v2"
-	tele "gopkg.in/telebot.v3"
+	telebot "gopkg.in/telebot.v3"
 )
 
 type MessageToRemind struct {
-	UserContext tele.Context
+	UserContext telebot.Context
 	MessageText string
 	RimindTime  time.Time
 }
@@ -31,13 +31,13 @@ var (
 )
 
 func StartBot(appVersion string) {
-	pref := tele.Settings{
+	pref := telebot.Settings{
 		URL:    "",
 		Token:  TeleToken,
-		Poller: &tele.LongPoller{Timeout: 10 * time.Second},
+		Poller: &telebot.LongPoller{Timeout: 10 * time.Second},
 	}
 
-	b, err := tele.NewBot(pref)
+	b, err := telebot.NewBot(pref)
 
 	log.Println("Bot instance created.")
 
@@ -58,8 +58,8 @@ func StartBot(appVersion string) {
 	b.Start()
 }
 
-func initSetHandler(b tele.Bot) {
-	b.Handle("/set", func(c tele.Context) error {
+func initSetHandler(b telebot.Bot) {
+	b.Handle("/set", func(c telebot.Context) error {
 		var senderUsername = c.Sender().Username
 
 		messagesCache[senderUsername] = new(MessageToRemind)
@@ -72,8 +72,8 @@ func initSetHandler(b tele.Bot) {
 	log.Println("Handler for /set - initialized.")
 }
 
-func initDismissHandler(b tele.Bot) {
-	b.Handle("/dismiss", func(c tele.Context) error {
+func initDismissHandler(b telebot.Bot) {
+	b.Handle("/dismiss", func(c telebot.Context) error {
 		var senderUsername = c.Sender().Username
 
 		messagesCache[senderUsername] = nil
@@ -86,8 +86,8 @@ func initDismissHandler(b tele.Bot) {
 	log.Println("Handler for /dismiss - initialized.")
 }
 
-func initPingHandler(b tele.Bot) {
-	b.Handle("/ping", func(c tele.Context) error {
+func initPingHandler(b telebot.Bot) {
+	b.Handle("/ping", func(c telebot.Context) error {
 		var senderUsername = c.Sender().Username
 
 		if messagesCache[senderUsername] == nil || messagesCache[senderUsername].RimindTime.IsZero() {
@@ -103,15 +103,15 @@ func initPingHandler(b tele.Bot) {
 	log.Println("Handler for /ping - initialized.")
 }
 
-func initHelpHandler(b tele.Bot) {
-	b.Handle("/help", func(c tele.Context) error {
+func initHelpHandler(b telebot.Bot) {
+	b.Handle("/help", func(c telebot.Context) error {
 		return c.Send(descriptionMsg)
 	})
 	log.Println("Handler for /help - initialized.")
 }
 
-func initStartHandler(b tele.Bot) {
-	b.Handle("/start", func(c tele.Context) error {
+func initStartHandler(b telebot.Bot) {
+	b.Handle("/start", func(c telebot.Context) error {
 		var senderUsername = c.Sender().Username
 		var helloMsg = fmt.Sprintf("Hello %s!", senderUsername)
 		c.Send(helloMsg)
@@ -121,8 +121,8 @@ func initStartHandler(b tele.Bot) {
 	log.Println("Handler for /start - initialized.")
 }
 
-func initOnTextHandler(b tele.Bot, err error) {
-	b.Handle(tele.OnText, func(c tele.Context) error {
+func initOnTextHandler(b telebot.Bot, err error) {
+	b.Handle(telebot.OnText, func(c telebot.Context) error {
 		var senderUsername = c.Sender().Username
 		payload := c.Message().Payload
 		text := c.Text()
