@@ -61,6 +61,16 @@ to quickly create a Cobra application.`,
 			return c.Send("What I should remind you?")
 		})
 
+		b.Handle("/dismiss", func(c tele.Context) error {
+			var senderUsername = c.Sender().Username
+
+			messagesCache[senderUsername] = nil
+
+			log.Printf("Reminder for %s dismissed.\n", senderUsername)
+		
+			return c.Send("Reminder dismissed.")
+		})
+
 		b.Handle(tele.OnText, func(c tele.Context) error {
 			var senderUsername = c.Sender().Username
 			payload := c.Message().Payload
