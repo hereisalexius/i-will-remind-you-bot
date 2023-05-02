@@ -47,7 +47,7 @@ to quickly create a Cobra application.`,
 		b, err := tele.NewBot(pref)
 
 		if err != nil {
-			log.Fatalf("Please check BOT_TOKEN env variable. %s", err)
+			log.Fatalf("Please check TELE_TOKEN env variable. %s", err)
 			return
 		}
 
@@ -120,6 +120,24 @@ to quickly create a Cobra application.`,
 			}
 
 			return err
+		})
+
+		var descriptionMsg = "I can /help you to /set simple reminder" +
+			" and will annoy you with notifications so you wont forget the thing!\n\n" +
+			"/set - to set notification" +
+			"\n/ping - to see its status" +
+			"\n/dismiss - to dismiss" +
+			"\n/help to see message you are reading"
+
+		b.Handle("/help", func(c tele.Context) error {
+			return c.Send(descriptionMsg)
+		})
+
+		b.Handle("/start", func(c tele.Context) error {
+			var senderUsername = c.Sender().Username
+			var helloMsg = fmt.Sprintf("Hello %s!", senderUsername)
+			c.Send(helloMsg)
+			return c.Send(descriptionMsg)
 		})
 
 		runCronJob()
