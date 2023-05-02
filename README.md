@@ -21,7 +21,9 @@ Please use commands below to manage your notification
 - *Golang* should be installed
 - Bot token should be assigned to system env variable with name `TELE_TOKEN`
 
-### Local run
+### Run release bin file
+1. `./build/i-will-remind-you-bot start`
+### Local build and run
 1. Just build using `go build`
 2. Run with `./i-will-remind-you-bot start`
 ### Docker
