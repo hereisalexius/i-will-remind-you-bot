@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
+	"gopkg.in/robfig/cron.v2"
 	tele "gopkg.in/telebot.v3"
 )
 
@@ -68,7 +69,7 @@ to quickly create a Cobra application.`,
 
 			log.Printf("Reminder for %s dismissed.\n", senderUsername)
 
-			return c.Send("Reminder dismissed.")
+			return c.Send("Reminder dismissed. Would you like to /set new?")
 		})
 
 		b.Handle("/ping", func(c tele.Context) error {
@@ -115,12 +116,13 @@ to quickly create a Cobra application.`,
 
 				log.Printf("%s has set time to: %s\n", senderUsername, remindMsg.RimindTime)
 				log.Printf("Reminder for %s created!\n", senderUsername)
-				return c.Send("Done.")
+				return c.Send("Done. You can /ping for status.")
 			}
 
 			return err
 		})
 
+		runCronJob()
 		fmt.Printf("i-will-remind-you-bot %s started\n", version)
 		b.Start()
 	},
@@ -138,4 +140,21 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// botCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func runCronJob() {
+	job := cron.New()
+
+	job.AddFunc("@every 5s", func() {
+		for _, element := range messagesCache {
+			if element != nil && !element.RimindTime.IsZero() {
+				if time.Now().After(element.RimindTime) {
+					element.UserContext.Send(fmt.Sprintf("Notifying you about %s!\n/dismiss ?", element.MessageText))
+				}
+			}
+		}
+	})
+
+	job.Start()
+
 }
