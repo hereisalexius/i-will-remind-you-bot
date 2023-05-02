@@ -67,8 +67,22 @@ to quickly create a Cobra application.`,
 			messagesCache[senderUsername] = nil
 
 			log.Printf("Reminder for %s dismissed.\n", senderUsername)
-		
+
 			return c.Send("Reminder dismissed.")
+		})
+
+		b.Handle("/ping", func(c tele.Context) error {
+			var senderUsername = c.Sender().Username
+
+			if messagesCache[senderUsername] == nil || messagesCache[senderUsername].RimindTime.IsZero() {
+				return c.Send("Reminder not set.")
+			}
+
+			return c.Send(fmt.Sprintf("Current reminder: %s\n"+
+				"Time: %s\n"+
+				"Would you like to /dismiss it?",
+				messagesCache[senderUsername].MessageText,
+				messagesCache[senderUsername].RimindTime.Format(time.Kitchen)))
 		})
 
 		b.Handle(tele.OnText, func(c tele.Context) error {
