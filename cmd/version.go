@@ -9,7 +9,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var version = "develop"
+//TODO: Need to pass version from properties file
+var version = "1.0.0"
 
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
