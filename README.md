@@ -32,3 +32,4 @@ Please use commands below to manage your notification
 3. Stop and remove container`docker stop i-will-remind-you-bot-container | docker rm i-will-remind-you-bot-container`
 
 **For deployments on Heroku use `heroku` branch*
+**Heroku is not for free anymore* 😥
