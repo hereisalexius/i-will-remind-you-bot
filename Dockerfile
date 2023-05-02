@@ -14,4 +14,4 @@ FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 WORKDIR /
 COPY --from=builder /go/src/app/i-will-remind-you-bot .
-CMD ["./i-will-remind-you-bot", "start"]
+ENTRYPOINT ["./i-will-remind-you-bot", "start"]

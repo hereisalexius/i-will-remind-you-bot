@@ -20,11 +20,14 @@ var (
 	TeleToken      = os.Getenv("TELE_TOKEN")
 	messagesCache  = make(map[string]*MessageToRemind)
 	descriptionMsg = "I can /help you to /set simple reminder" +
-		" and will annoy you with notifications so you wont forget the thing!\n\n" +
-		"/set - to set notification" +
-		"\n/ping - to see its status" +
-		"\n/dismiss - to dismiss" +
-		"\n/help to see message you are reading"
+		" and will annoy you with notifications so you wont forget the thing!\n" +
+		"\n/start - obviously, to start using bot" +
+		"\n/set - you will be prompted to questionnaire." +
+		"\n		Question #1: What I should remind you? - Just type what you want to be reminded of. (example: Turn off oven)" +
+		"\n		Question #2: After how long to warn you? - Provide duration for time when you should be notified (example: 30m)" +
+		"\n/dismiss - to dismiss notification on any stage" +
+		"\n/ping - to check if notification was set" +
+		"\n/help - to see help"
 )
 
 func StartBot(appVersion string) {
